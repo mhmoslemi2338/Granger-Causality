@@ -13,14 +13,16 @@ def infocrit(L, k, m):
     return aic, bic
 
 
-def _demean(X):
+def _demean(X, normalize):
     """Subtract mean along a given axis (keeps dims)."""
     n, m,N = X.shape
     Y = X.swapaxes(1, 2).reshape(n, -1)
     row_means = np.mean(Y, axis=1, keepdims=True)
     Y = Y - row_means
-    row_stds = np.std(Y, axis=1, keepdims=True, ddof=1)
-    Y = np.divide(Y, row_stds, out=np.zeros_like(Y), where=row_stds!=0)
+    
+    if normalize:
+        row_stds = np.std(Y, axis=1, keepdims=True, ddof=1)
+        Y = np.divide(Y, row_stds, out=np.zeros_like(Y), where=row_stds!=0)
     return Y[:,:,None]
 
 
@@ -58,7 +60,7 @@ def tsdata_to_infocrit(X, morder, verb=True):
     n, m, N = X.shape
 
     # No constant term; normalise by demeaning along time within each trial
-    X = _demean(X)
+    X = _demean(X, normalize=True)
 
     # Model order handling (scalar only, matching your MATLAB branch)
     q = int(morder)
@@ -120,7 +122,6 @@ def tsdata_to_infocrit(X, morder, verb=True):
 
     while k<=q:
     # for i in range(2):
-
 
         result = np.reshape(XX[:, kk-1, k:m, :], (kn, M),order='F')
         EF = AF[:,kf-1] @ result
