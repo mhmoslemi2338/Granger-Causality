@@ -6,9 +6,6 @@ from tsdata_to_infocrit import _demean
 
 def tsdata_to_var(X,p):
 
-    
-
-
     # X  = np.array(X).T # X must be numpy array in shape of (num var, num rows)
     X  = np.array(X) # X must be numpy array in shape of (num var, num rows)
 
@@ -78,6 +75,7 @@ def tsdata_to_var(X,p):
 
 
     while k<=p:
+    # while k<=1:
     # for i in range(2):
 
         result = np.reshape(XX[:, kk-1, k:m, :], (kn, M),order='F')
@@ -86,6 +84,7 @@ def tsdata_to_var(X,p):
         result = np.reshape(XX[:, kk-1, k-1:m-1, :], (kn, M),order='F')
         EB = AB[:,kb-1] @ result
 
+        # return EF, EB
 
         # Cholesky of EF*EF' (lower triangular)
         L_F = np.linalg.cholesky(EF @ EF.T)
@@ -93,11 +92,6 @@ def tsdata_to_var(X,p):
 
         # Equivalent of (L_F \ EF) * (L_B \ EB)'
         R = np.linalg.solve(L_F, EF) @ np.linalg.solve(L_B, EB).T
-
-
-
-
-
 
 
         k+=1
@@ -111,13 +105,14 @@ def tsdata_to_var(X,p):
         ABPREV = AB[:, kb - 1]
 
 
-        # Cholesky decompositions
-        LF = np.linalg.cholesky(I - R @ R.T)
-        LB = np.linalg.cholesky(I - R.T @ R)
+        # # Cholesky decompositions
+        # LF = np.linalg.cholesky(I - R @ R.T)
+        # LB = np.linalg.cholesky(I - R.T @ R)
 
 
         L1 = np.linalg.cholesky(I - R @ R.T)
         AF[:, kf-1] = np.linalg.solve(L1, AFPREV - R @ ABPREV)
+
 
 
         L2 = np.linalg.cholesky(I - R.T @ R)

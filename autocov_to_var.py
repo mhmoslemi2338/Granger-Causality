@@ -17,6 +17,7 @@ def autocov_to_var(G):
     )
 
 
+
     # Initialize forward and backward coefficient matrices
     AF = np.zeros((n, qn))
     AB = np.zeros((n, qn))

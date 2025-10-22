@@ -9,6 +9,9 @@ def lyapslv(A, Q):
     n = A.shape[0]
 
     T, U = schur(A, output='real')
+
+
+
     # Flip signs to make diag(U) nonnegative (where possible)
     s = np.sign(np.real(np.diag(U)))
     s[s == 0] = 1  # leave zeros as +1 to avoid NaNs
@@ -27,6 +30,7 @@ def lyapslv(A, Q):
     Xs = np.zeros((n, n), dtype=T.dtype)
 
     j = n
+
 
 
 
@@ -75,4 +79,3 @@ def lyapslv(A, Q):
 
 
     return X
-

@@ -2,10 +2,12 @@
 import numpy as np
 from lyapslv import lyapslv
 
-def var_to_autocov(A,SIG):
 
 
-    acdectol  = 1e-8
+def var_to_autocov(A,SIG, error = 1e-3, q = None):
+
+
+    acdectol  = error
 
     n, n1, p = A.shape
 
@@ -42,14 +44,20 @@ def var_to_autocov(A,SIG):
     ])
 
 
+    
     G1 = lyapslv(A1, -SIG1)
+
+
 
     # res = A1 @ G1 @ A1.T - G1 + SIG1
     # info["acrelerr"] = np.linalg.norm(res, ord=2) / np.linalg.norm(SIG1,ord=2)
     info['acminlags'] = np.ceil(np.log(acdectol)/np.log(info['rho']))
     info['aclags'] = info['acminlags']
 
-    q = info['aclags']
+
+    if q == None:
+        q = info['aclags']
+
     q1 = q+1
 
     n,_,p = A.shape
