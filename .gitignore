@@ -26,9 +26,11 @@ share/python-wheels/
 *.egg
 MANIFEST
 data
-tmp copy.ipynb
-tmp.ipynb
-tmp_.ipynb
+# tmp copy.ipynb
+# tmp.ipynb
+# tmp_.ipynb
+# tmp__.ipynb
+
 
 # PyInstaller
 #  Usually these files are written by a python script from a template
